@@ -56,7 +56,6 @@ int main(){
     char nomNiveau[30], nomDeplacement[30];
     int compteur, nbDep;
     int sokobanX, sokobanY;
-    char touche;
     typeDeplacements deplacements;
     lecture_niveau(nomNiveau);
     charger_partie(niveau, nomNiveau);
@@ -71,6 +70,7 @@ int main(){
         printf("Fichier deplacements (.dep) : ");
         scanf("%s",nomDeplacement);
         chargerDeplacements(deplacements, nomDeplacement, &nbDep);
+        printf("nbDep : %d\n",nbDep);
         system("clear");
         affiche_entete(nomNiveau, compteur);
         afficher_plateau(plateau, niveau);
