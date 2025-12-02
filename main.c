@@ -29,7 +29,7 @@ const char SOKOBAN[1] = "@";
 const char CAISSES[1] = "$";
 const char CIBLES[1] = ".";
 const char MURS[1] = "#";
-const char VIDE[1] = " ";
+const char ESPACE[1] = " ";
 const char CAISSES_SUR_CIBLES[1] = "*";
 const char SOKOBAN_SUR_CIBLE[1] = "+";
 const char SOK_GAUCHE = 'g';
@@ -40,21 +40,18 @@ const char SOK_HAUT = 'h';
 const char CAISSE_HAUT = 'H';
 const char SOK_BAS = 'b';
 const char CAISSE_BAS = 'B';
+const char VIDE = "";
 
 // prototypes de toutes les fonctions / procedures
 void lecture_niveau(char niveau[]);
 int kbhit();
 void charger_partie(t_Plateau plateau, char fichier[]);
-void enregistrer_partie(t_Plateau plateau, char fichier[]);
 void afficher_plateau(t_Plateau plateau, t_Plateau niveau, int zoom);
 void affiche_entete(char niveau[], int compteur);
 void lecture_touches(char *Adr_touche);
 void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_tabDeplacement deplacements);
 void detection_sokoban(t_Plateau plateau, int *AdrX, int *AdrY);
 bool gagne(t_Plateau plateau, t_Plateau niveau);
-void zoomer(char touche, int *zoom);
-void undo(t_Plateau plateau,t_tabDeplacement deplacements, int *adrCompteur, char touche, int x, int y);
-void enregistrer_deplacements(t_tabDeplacement t, int nb, char fic[]);
 
 
 int main(){
@@ -197,24 +194,9 @@ void charger_partie(t_Plateau plateau, char fichier[]){
     }
 }
 
-void enregistrer_partie(t_Plateau plateau, char fichier[]){
-    FILE *f;
-    char finDeLigne = '\n';
-
-    f = fopen(fichier, "w");
-    for (int ligne = 0; ligne < TAILLE; ligne++){
-        for (int colonne = 0; colonne < TAILLE; colonne++){
-            fwrite(&plateau[ligne][colonne], sizeof(char), 1, f);
-        }
-        fwrite(&finDeLigne, sizeof(char), 1, f);
-    }
-    fclose(f);
-}
-
 void afficher_plateau(t_Plateau plateau, t_Plateau niveau, int zoom){
     char caseAffiche;
-    caseAffiche = VIDE[0];
-
+    caseAffiche = ESPACE[0];
     for (int x = 0; x < TAILLE; x++){
         for (int i = 0; i < zoom; i++){ // affiche plusieurs fois les lignes en fonction du zoom
             for (int y = 0; y < TAILLE; y++){
@@ -228,19 +210,17 @@ void afficher_plateau(t_Plateau plateau, t_Plateau niveau, int zoom){
                     caseAffiche = CAISSES[0];
                     plateau[x][y] = CAISSES[0];
                 }
-                else if (casePlateau[0] == SOKOBAN[0] || casePlateau[0] == SOKOBAN_SUR_CIBLE[0])
-                {
+                else if (casePlateau[0] == SOKOBAN[0] || casePlateau[0] == SOKOBAN_SUR_CIBLE[0]){
                     caseAffiche = SOKOBAN[0];
                 }
-                else if (caseNiveau[0] == CIBLES[0] || caseNiveau[0] == CAISSES_SUR_CIBLES[0] || caseNiveau[0] == SOKOBAN_SUR_CIBLE[0])
-                {
+                else if (caseNiveau[0] == CIBLES[0] || caseNiveau[0] == CAISSES_SUR_CIBLES[0] || caseNiveau[0] == SOKOBAN_SUR_CIBLE[0]){
                     if (casePlateau[0] != SOKOBAN[0] && casePlateau[0] != CAISSES[0]){
                         caseAffiche = CIBLES[0];
                         plateau[x][y] = CIBLES[0];
                     }
                 }
                 else{
-                    caseAffiche = VIDE[0];
+                    caseAffiche = ESPACE[0];
                 }
                 for (int k = 0; k < zoom; k++){ // affiche les colones plusieurs fois en fonction du zoom
                     printf("%c", caseAffiche);
@@ -275,7 +255,7 @@ void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_
                 plateau[x - 1][y] = SOKOBAN[0];
                 deplacements[*adrCompteur + 1] = SOK_HAUT;
             }
-            plateau[x][y] = VIDE[0];
+            plateau[x][y] = ESPACE[0];
             *adrCompteur = *adrCompteur + 1;
         }
     }
@@ -291,7 +271,7 @@ void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_
                 plateau[x][y - 1] = SOKOBAN[0];
                 deplacements[*adrCompteur + 1] = SOK_GAUCHE;
             }
-            plateau[x][y] = VIDE[0];
+            plateau[x][y] = ESPACE[0];
             *adrCompteur = *adrCompteur + 1;
         }
     }
@@ -307,7 +287,7 @@ void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_
                 plateau[x + 1][y] = SOKOBAN[0];
                 deplacements[*adrCompteur + 1] = SOK_BAS;
             }
-            plateau[x][y] = VIDE[0];
+            plateau[x][y] = ESPACE[0];
             *adrCompteur = *adrCompteur + 1;
         }
     }
@@ -323,7 +303,7 @@ void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_
                 plateau[x][y + 1] = SOKOBAN[0];
                 deplacements[*adrCompteur + 1] = SOK_DROITE;
             }
-            plateau[x][y] = VIDE[0];
+            plateau[x][y] = ESPACE[0];
             *adrCompteur = *adrCompteur + 1;
         }
     }
@@ -364,70 +344,4 @@ bool gagne(t_Plateau plateau, t_Plateau niveau){
         }
     }
     return victoire;
-}
-
-void zoomer(char touche, int *zoom){
-    if (touche == PLUS && *zoom < 3){
-        *zoom = *zoom + 1;
-    }
-    else if (touche == MOINS && *zoom > 1){
-        *zoom = *zoom - 1;
-    }
-}
-
-void undo(t_Plateau plateau,t_tabDeplacement deplacements, int *adrCompteur, char touche, int x, int y){
-    if(touche == UNDO){
-        if(deplacements[*adrCompteur] == SOK_BAS){ // si le dernier deplacement enregistrer est sokoban seul vers le bas alors
-            plateau[x - 1][y] = SOKOBAN[0]; // remonter sokoban de 1
-            plateau[x][y] = VIDE[0]; // rendre la case ou il était présent vide
-            *adrCompteur = *adrCompteur - 1; // reduire le compteur de mouvements de 1
-        }
-        else if(deplacements[*adrCompteur] == SOK_HAUT){ 
-            plateau[x + 1][y] = SOKOBAN[0];
-            plateau[x][y] = VIDE[0];
-            *adrCompteur = *adrCompteur - 1;
-        }
-        else if(deplacements[*adrCompteur] == SOK_DROITE){
-            plateau[x][y - 1] = SOKOBAN[0];
-            plateau[x][y] = VIDE[0];
-            *adrCompteur = *adrCompteur - 1;
-        }
-        else if(deplacements[*adrCompteur] == SOK_GAUCHE){
-            plateau[x][y + 1] = SOKOBAN[0];
-            plateau[x][y] = VIDE[0];
-            *adrCompteur = *adrCompteur - 1;
-        }
-        else if(deplacements[*adrCompteur] == CAISSE_BAS){ // si le dernier deplacement enregistrer est sokoban avec une caisse vers le bas alors
-            plateau[x - 1][y] = SOKOBAN[0]; // remonter sokoban de 1
-            plateau[x + 1][y] = VIDE[0]; // rendre la position de la caisse vide
-            plateau[x][y] = CAISSES[0]; // mettre la caisse a l'emplacement de sokoban
-            *adrCompteur = *adrCompteur - 1;
-        }
-        else if(deplacements[*adrCompteur] == CAISSE_HAUT){
-            plateau[x + 1][y] = SOKOBAN[0];
-            plateau[x - 1][y] = VIDE[0];
-            plateau[x][y] = CAISSES[0];
-            *adrCompteur = *adrCompteur - 1;
-        }
-        else if(deplacements[*adrCompteur] == CAISSE_DROITE){
-            plateau[x][y - 1] = SOKOBAN[0];
-            plateau[x][y + 1] = VIDE[0];
-            plateau[x][y] = CAISSES[0];
-            *adrCompteur = *adrCompteur - 1;
-        }
-        else if(deplacements[*adrCompteur] == CAISSE_GAUCHE){
-            plateau[x][y + 1] = SOKOBAN[0];
-            plateau[x][y - 1] = VIDE[0];
-            plateau[x][y] = CAISSES[0];
-            *adrCompteur = *adrCompteur - 1;
-        }
-    }
-}
-
-void enregistrer_deplacements(t_tabDeplacement t, int nb, char fic[]){
-    FILE * f;
-
-    f = fopen(fic, "w");
-    fwrite(t,sizeof(char), nb, f);
-    fclose(f);
 }
