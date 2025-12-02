@@ -38,7 +38,7 @@ const char CAISSE_BAS = 'B';
 void lecture_niveau(char niveau[]);
 int kbhit();
 void charger_partie(t_Plateau plateau, char fichier[]);
-void afficher_plateau(t_Plateau plateau, t_Plateau niveau, int zoom);
+void afficher_plateau(t_Plateau plateau, t_Plateau niveau);
 void affiche_entete(char niveau[], int compteur);
 void lecture_touches(char *Adr_touche);
 void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_tabDeplacement deplacements);
@@ -66,7 +66,7 @@ int main(){
         charger_partie(plateau, nomNiveau);
         system("clear");
         affiche_entete(nomNiveau, compteur);
-        afficher_plateau(plateau, niveau, zoom);
+        afficher_plateau(plateau, niveau);
 
         while (touche != ABANDON && victoire == false){ // boucle d'affichage + deplacements + undo, tant que pas de victorie ou d'abandon
             usleep(60000); // delay pour ne pas prendre trop de ressources
@@ -77,7 +77,7 @@ int main(){
                 deplacer(touche, plateau, sokobanX, sokobanY, &compteur,deplacements);
                 system("clear");
                 affiche_entete(nomNiveau, compteur);
-                afficher_plateau(plateau, niveau, zoom);
+                afficher_plateau(plateau, niveau);
             }
         }
     }
@@ -142,11 +142,10 @@ void charger_partie(t_Plateau plateau, char fichier[]){
     }
 }
 
-void afficher_plateau(t_Plateau plateau, t_Plateau niveau, int zoom){
+void afficher_plateau(t_Plateau plateau, t_Plateau niveau){
     char caseAffiche;
     caseAffiche = ESPACE[0];
     for (int x = 0; x < TAILLE; x++){
-        for (int i = 0; i < zoom; i++){ // affiche plusieurs fois les lignes en fonction du zoom
             for (int y = 0; y < TAILLE; y++){
                 char casePlateau[1], caseNiveau[1];
                 casePlateau[0] = plateau[x][y];
@@ -170,9 +169,6 @@ void afficher_plateau(t_Plateau plateau, t_Plateau niveau, int zoom){
                 else{
                     caseAffiche = ESPACE[0];
                 }
-                for (int k = 0; k < zoom; k++){ // affiche les colones plusieurs fois en fonction du zoom
-                    printf("%c", caseAffiche);
-                }
             }
             printf("\n");
         }
@@ -182,7 +178,6 @@ void afficher_plateau(t_Plateau plateau, t_Plateau niveau, int zoom){
 void affiche_entete(char niveau[], int compteur){
     printf("SOKOBAN niveau : %s\n\ntouches de depalcements :\n%c (haut)", niveau, HAUT);
     printf(" %c (gauche)\n%c (bas)  %c (droite)\n\n", GAUCHE, BAS, DROITE);
-    printf("Autre : %c (abandon) | %c (recommencer) | %c (zoom plus) | %c (zoom moins) | %c (undo) |\n\n", ABANDON, RECOMMENCER, PLUS, MOINS, UNDO);
     printf("Nombre de deplacements : %d \n\n\n", compteur);
 }
 
