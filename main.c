@@ -146,32 +146,31 @@ void afficher_plateau(t_Plateau plateau, t_Plateau niveau){
     char caseAffiche;
     caseAffiche = ESPACE[0];
     for (int x = 0; x < TAILLE; x++){
-            for (int y = 0; y < TAILLE; y++){
-                char casePlateau[1], caseNiveau[1];
-                casePlateau[0] = plateau[x][y];
-                caseNiveau[0] = niveau[x][y];
-                if (casePlateau[0] == MURS[0]){
-                    caseAffiche = MURS[0];
-                }
-                else if (casePlateau[0] == CAISSES[0] || casePlateau[0] == CAISSES_SUR_CIBLES[0]){
-                    caseAffiche = CAISSES[0];
-                    plateau[x][y] = CAISSES[0];
-                }
-                else if (casePlateau[0] == SOKOBAN[0] || casePlateau[0] == SOKOBAN_SUR_CIBLE[0]){
-                    caseAffiche = SOKOBAN[0];
-                }
-                else if (caseNiveau[0] == CIBLES[0] || caseNiveau[0] == CAISSES_SUR_CIBLES[0] || caseNiveau[0] == SOKOBAN_SUR_CIBLE[0]){
-                    if (casePlateau[0] != SOKOBAN[0] && casePlateau[0] != CAISSES[0]){
-                        caseAffiche = CIBLES[0];
-                        plateau[x][y] = CIBLES[0];
-                    }
-                }
-                else{
-                    caseAffiche = ESPACE[0];
+        for (int y = 0; y < TAILLE; y++){
+            char casePlateau[1], caseNiveau[1];
+            casePlateau[0] = plateau[x][y];
+            caseNiveau[0] = niveau[x][y];
+            if (casePlateau[0] == MURS[0]){
+                caseAffiche = MURS[0];
+            }
+            else if (casePlateau[0] == CAISSES[0] || casePlateau[0] == CAISSES_SUR_CIBLES[0]){
+                caseAffiche = CAISSES[0];
+                plateau[x][y] = CAISSES[0];
+            }
+            else if (casePlateau[0] == SOKOBAN[0] || casePlateau[0] == SOKOBAN_SUR_CIBLE[0]){
+                caseAffiche = SOKOBAN[0];
+            }
+            else if (caseNiveau[0] == CIBLES[0] || caseNiveau[0] == CAISSES_SUR_CIBLES[0] || caseNiveau[0] == SOKOBAN_SUR_CIBLE[0]){
+                if (casePlateau[0] != SOKOBAN[0] && casePlateau[0] != CAISSES[0]){
+                    caseAffiche = CIBLES[0];
+                    plateau[x][y] = CIBLES[0];
                 }
             }
-            printf("\n");
+            else{
+                caseAffiche = ESPACE[0];
+            }
         }
+        printf("\n");
     }
 }
 
