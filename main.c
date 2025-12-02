@@ -8,6 +8,7 @@
 #include <fcntl.h>
 
 #define TAILLE 12
+#define NB_DEPLACEMENTS 500
 
 // definition des touches
 #define HAUT 'z'
@@ -16,6 +17,7 @@
 #define DROITE 'd'
 
 typedef char t_Plateau[TAILLE][TAILLE];
+typedef char typeDeplacements[NB_DEPLACEMENTS];
 
 // definition des char a enregistrer / afficher
 const char SOKOBAN[1] = "@";
@@ -51,10 +53,11 @@ int main(){
     //declaration des variables
     bool victoire = false;
     t_Plateau plateau, niveau;
-    char nomNiveau[30];
-    int compteur;
+    char nomNiveau[30], nomDeplacement[30];
+    int compteur, nbDep;
     int sokobanX, sokobanY;
     char touche;
+    typeDeplacements deplacements;
     lecture_niveau(nomNiveau);
     charger_partie(niveau, nomNiveau);
 
@@ -65,6 +68,9 @@ int main(){
 
         // initialisation
         charger_partie(plateau, nomNiveau);
+        printf("Fichier deplacements (.dep) : ");
+        scanf("%s",nomDeplacement);
+        chargerDeplacements(deplacements, nomDeplacement, &nbDep);
         system("clear");
         affiche_entete(nomNiveau, compteur);
         afficher_plateau(plateau, niveau);
@@ -72,14 +78,12 @@ int main(){
         while (victoire == false){ 
             usleep(60000); // delay pour ne pas prendre trop de ressources
             victoire = gagne(plateau, niveau);
-            if (kbhit()){ // si touche appuyé
-                lecture_touches(&touche);
-                detection_sokoban(plateau, &sokobanX, &sokobanY);
-                deplacer(touche, plateau, sokobanX, sokobanY, &compteur);
-                system("clear");
-                affiche_entete(nomNiveau, compteur);
-                afficher_plateau(plateau, niveau);
-            }
+            lecture_touches(&touche);
+            detection_sokoban(plateau, &sokobanX, &sokobanY);
+            deplacer(touche, plateau, sokobanX, sokobanY, &compteur);
+            system("clear");
+            affiche_entete(nomNiveau, compteur);
+            afficher_plateau(plateau, niveau);
         }
     }
     if (victoire == true){ // victoire
@@ -91,36 +95,6 @@ int main(){
 void lecture_niveau(char niveau[]){
     printf("nom du fichier .sok : ");
     scanf("%s", niveau);
-}
-
-int kbhit(){
-    // la fonction retourne :
-    // 1 si un caractere est present
-    // 0 si pas de caractere présent
-    int unCaractere = 0;
-    struct termios oldt, newt;
-    int ch;
-    int oldf;
-
-    // mettre le terminal en mode non bloquant
-    tcgetattr(STDIN_FILENO, &oldt);
-    newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-    oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
-    fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
-
-    ch = getchar();
-
-    // restaurer le mode du terminal
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-    fcntl(STDIN_FILENO, F_SETFL, oldf);
-
-    if (ch != EOF){
-        ungetc(ch, stdin);
-        unCaractere = 1;
-    }
-    return unCaractere;
 }
 
 void charger_partie(t_Plateau plateau, char fichier[]){
