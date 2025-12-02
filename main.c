@@ -8,21 +8,14 @@
 #include <fcntl.h>
 
 #define TAILLE 12
-#define NB_DEPLACEMENTS 500
 
 // definition des touches
 #define HAUT 'z'
 #define BAS 's'
 #define GAUCHE 'q'
 #define DROITE 'd'
-#define RECOMMENCER 'r'
-#define ABANDON 'x'
-#define PLUS '+'
-#define MOINS '-'
-#define UNDO 'u'
 
 typedef char t_Plateau[TAILLE][TAILLE];
-typedef char t_tabDeplacement[NB_DEPLACEMENTS];
 
 // definition des char a enregistrer / afficher
 const char SOKOBAN[1] = "@";
@@ -55,21 +48,18 @@ bool gagne(t_Plateau plateau, t_Plateau niveau);
 
 int main(){
     //declaration des variables
-    bool recommencer = true, victoire = false;
+    bool victoire = false;
     t_Plateau plateau, niveau;
     char nomNiveau[30];
-    char enregistrer = 'N', enregistrerDep = 'N';
-    int zoom = 1, compteur;
+    int compteur;
     int sokobanX, sokobanY;
-    t_tabDeplacement deplacements;
-    char touche, verifRecommencer;
+    char touche;
     lecture_niveau(nomNiveau);
     charger_partie(niveau, nomNiveau);
 
-    while (recommencer && victoire == false){ // jouer les parties en boucle tant que l'utilisateur n'a pas abandonner / gagner
+    while (victoire == false){ // jouer les parties en boucle tant que l'utilisateur n'a pas abandonner
         // remise a 0
         touche = '\0';
-        verifRecommencer = '\0';
         compteur = 0;        
 
         // initialisation
@@ -85,55 +75,14 @@ int main(){
                 lecture_touches(&touche);
                 detection_sokoban(plateau, &sokobanX, &sokobanY);
                 deplacer(touche, plateau, sokobanX, sokobanY, &compteur,deplacements);
-                undo(plateau,deplacements,&compteur,touche,sokobanX,sokobanY);
-                zoomer(touche,&zoom);
                 system("clear");
                 affiche_entete(nomNiveau, compteur);
                 afficher_plateau(plateau, niveau, zoom);
-            }
-
-            if (touche == RECOMMENCER){ // verification pour recommencer
-                printf("Etes vous sur de vouloir recommencer [Y/N] ? ");
-                scanf("%c", &verifRecommencer);
-
-                if (verifRecommencer == 'Y'){
-                    break;
-                }
-            }
-            if (touche == ABANDON){ // verification abandon + enregistrer
-                recommencer = false;
-                printf("Voulez vous enregistrer votre partie [Y/N] ? ");
-                scanf("%c", &enregistrer);
-
-                if (enregistrer == 'Y'){
-                    char nomFichier[30];
-                    printf("nom du fichier : ");
-                    scanf(" %s", nomFichier);
-                    enregistrer_partie(plateau, nomFichier);
-                }
-                printf("Voulez vous enregistrer vos deplacements [Y/N] ? ");
-                scanf(" %c", &enregistrerDep);
-
-                if (enregistrerDep == 'Y'){
-                    char nomFichierDep[30];
-                    printf("nom du fichier (a la fin ajoutez \".dep\"): ");
-                    scanf("%s", nomFichierDep);
-                    enregistrer_deplacements(deplacements, compteur, nomFichierDep);
-                }
-                printf("Au revoir...\n");
             }
         }
     }
     if (victoire == true){ // victoire + enregistrer
         printf("Bravo !!! passez au niveau suivant !\n");
-        printf("Voulez vous enregistrer vos deplacements [Y/N] ? ");
-        scanf(" %c", &enregistrerDep);
-        if (enregistrerDep == 'Y'){
-            char nomFichierDep[30];
-            printf("nom du fichier (a la fin ajoutez \".dep\"): ");
-            scanf("%s", nomFichierDep);
-            enregistrer_deplacements(deplacements, compteur, nomFichierDep);
-        }
     }
     return EXIT_SUCCESS;
 }
