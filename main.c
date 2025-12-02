@@ -43,7 +43,7 @@ void charger_partie(t_Plateau plateau, char fichier[]);
 void afficher_plateau(t_Plateau plateau, t_Plateau niveau);
 void affiche_entete(char niveau[], int compteur);
 void lecture_touches(char *Adr_touche);
-void deplacer(char touche, t_Plateau plateau, int x, int y, int nbDep);
+void deplacer(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int nbDep);
 void detection_sokoban(t_Plateau plateau, int *AdrX, int *AdrY);
 bool gagne(t_Plateau plateau, t_Plateau niveau);
 void chargerDeplacements(typeDeplacements t, char fichier[], int * nb);
@@ -79,7 +79,7 @@ int main(){
             usleep(60000); // delay pour ne pas prendre trop de ressources
             victoire = gagne(plateau, niveau);
             detection_sokoban(plateau, &sokobanX, &sokobanY);
-            deplacer(touche, plateau, sokobanX, sokobanY, &compteur);
+            deplacer(deplacements, plateau, sokobanX, sokobanY, nbDep);
             system("clear");
             affiche_entete(nomNiveau, compteur);
             afficher_plateau(plateau, niveau);
@@ -155,51 +155,46 @@ void affiche_entete(char niveau[], int compteur){
     printf("Nombre de deplacements : %d \n\n\n", compteur);
 }
 
-void deplacer(char touche, t_Plateau plateau, int x, int y, int nbDep){
-    if(deplacements[nbDep] == SOK_BAS){ // si le dernier deplacement enregistrer est sokoban seul vers le bas alors
-            plateau[x + 1][y] = SOKOBAN[0]; // remonter sokoban de 1
-            plateau[x][y] = VIDE[0]; // rendre la case ou il était présent vide
-            nbDep = nbDep - 1; // reduire le compteur de mouvements de 1
+void deplacer(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int nbDep){
+    for(int i = 0; i < nbDep; i++){
+        if(deplacement[i] == SOK_BAS){
+            plateau[x + 1][y] = SOKOBAN[0]; 
+            plateau[x][y] = ESPACE[0]; 
         }
-        else if(deplacements[nbDep] == SOK_HAUT){ 
+        else if(deplacement[i] == SOK_HAUT){ 
             plateau[x - 1][y] = SOKOBAN[0];
-            plateau[x][y] = VIDE[0];
-            nbDep = nbDep - 1;
+            plateau[x][y] = ESPACE[0];
         }
-        else if(deplacements[nbDep] == SOK_DROITE){
+        else if(deplacement[i] == SOK_DROITE){
             plateau[x][y + 1] = SOKOBAN[0];
-            plateau[x][y] = VIDE[0];
-            nbDep = nbDep - 1;
+            plateau[x][y] = ESPACE[0];
+
         }
-        else if(deplacements[nbDep] == SOK_GAUCHE){
+        else if(deplacement[i] == SOK_GAUCHE){
             plateau[x][y - 1] = SOKOBAN[0];
-            plateau[x][y] = VIDE[0];
-            nbDep = nbDep - 1;
+            plateau[x][y] = ESPACE[0];
         }
-        else if(deplacements[nbDep] == CAISSE_BAS){ // si le dernier deplacement enregistrer est sokoban avec une caisse vers le bas alors
-            plateau[x + 1][y] = SOKOBAN[0]; // remonter sokoban de 1
-            plateau[x - 1][y] = VIDE[0]; // rendre la position de la caisse vide
-            plateau[x][y] = CAISSES[0]; // mettre la caisse a l'emplacement de sokoban
-            nbDep = nbDep - 1;
+        else if(deplacement[i] == CAISSE_BAS){ 
+            plateau[x + 1][y] = SOKOBAN[0];
+            plateau[x - 1][y] = ESPACE[0];
+            plateau[x][y] = CAISSES[0];
         }
-        else if(deplacements[nbDep] == CAISSE_HAUT){
+        else if(deplacement[i] == CAISSE_HAUT){
             plateau[x - 1][y] = SOKOBAN[0];
-            plateau[x + 1][y] = VIDE[0];
+            plateau[x + 1][y] = ESPACE[0];
             plateau[x][y] = CAISSES[0];
-            nbDep = nbDep - 1;
         }
-        else if(deplacements[nbDep] == CAISSE_DROITE){
+        else if(deplacement[i] == CAISSE_DROITE){
             plateau[x][y + 1] = SOKOBAN[0];
-            plateau[x][y - 1] = VIDE[0];
+            plateau[x][y - 1] = ESPACE[0];
             plateau[x][y] = CAISSES[0];
-            nbDep = nbDep - 1;
         }
-        else if(deplacements[nbDep] == CAISSE_GAUCHE){
+        else if(deplacement[i] == CAISSE_GAUCHE){
             plateau[x][y - 1] = SOKOBAN[0];
-            plateau[x][y + 1] = VIDE[0];
+            plateau[x][y + 1] = ESPACE[0];
             plateau[x][y] = CAISSES[0];
-            nbDep = nbDep - 1;
         }
+    }
 }
 
 void detection_sokoban(t_Plateau plateau, int *AdrX, int *AdrY){
