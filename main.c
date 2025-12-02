@@ -40,7 +40,6 @@ const char SOK_HAUT = 'h';
 const char CAISSE_HAUT = 'H';
 const char SOK_BAS = 'b';
 const char CAISSE_BAS = 'B';
-const char VIDE = "";
 
 // prototypes de toutes les fonctions / procedures
 void lecture_niveau(char niveau[]);
