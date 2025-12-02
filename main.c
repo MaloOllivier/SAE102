@@ -220,8 +220,10 @@ void detection_sokoban(t_Plateau plateau, int *AdrX, int *AdrY){
     }
 }
 
-bool gagne(t_Plateau plateau, t_Plateau niveau){
-    bool victoire = true;
+bool gagne(t_Plateau plateau, t_Plateau niveau, int nbDep, int compteur){
+    if (compteur == nbDep){
+        bool victoire = true;
+    }
     for (int x = 0; x < TAILLE; x++){
         for (int y = 0; y < TAILLE; y++){
             if ((niveau[x][y] == CIBLES[0] || niveau[x][y] == SOKOBAN_SUR_CIBLE[0]) || niveau[x][y] == CAISSES_SUR_CIBLES[0]){
