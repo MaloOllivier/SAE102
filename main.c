@@ -78,7 +78,6 @@ int main(){
         while (victoire == false){ 
             usleep(60000); // delay pour ne pas prendre trop de ressources
             victoire = gagne(plateau, niveau);
-            lecture_touches(&touche);
             detection_sokoban(plateau, &sokobanX, &sokobanY);
             deplacer(touche, plateau, sokobanX, sokobanY, &compteur);
             system("clear");
@@ -154,10 +153,6 @@ void affiche_entete(char niveau[], int compteur){
     printf("SOKOBAN niveau : %s\n\ntouches de depalcements :\n%c (haut)", niveau, HAUT);
     printf(" %c (gauche)\n%c (bas)  %c (droite)\n\n", GAUCHE, BAS, DROITE);
     printf("Nombre de deplacements : %d \n\n\n", compteur);
-}
-
-void lecture_touches(char *Adr_touche){
-    *Adr_touche = getchar();
 }
 
 void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur){
