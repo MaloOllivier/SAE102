@@ -64,6 +64,7 @@ int main(){
 
         // initialisation
         charger_partie(plateau, nomNiveau);
+        printf("");
         system("clear");
         affiche_entete(nomNiveau, compteur);
         afficher_plateau(plateau, niveau);
@@ -280,3 +281,4 @@ bool gagne(t_Plateau plateau, t_Plateau niveau){
     }
     return victoire;
 }
+
