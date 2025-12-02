@@ -169,6 +169,7 @@ void afficher_plateau(t_Plateau plateau, t_Plateau niveau){
             else{
                 caseAffiche = ESPACE[0];
             }
+            printf("%c", caseAffiche);
         }
         printf("\n");
     }
