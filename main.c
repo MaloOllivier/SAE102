@@ -44,6 +44,7 @@ void lecture_touches(char *Adr_touche);
 void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur);
 void detection_sokoban(t_Plateau plateau, int *AdrX, int *AdrY);
 bool gagne(t_Plateau plateau, t_Plateau niveau);
+void chargerDeplacements(typeDeplacements t, char fichier[], int * nb);
 
 
 int main(){
@@ -279,4 +280,27 @@ bool gagne(t_Plateau plateau, t_Plateau niveau){
         }
     }
     return victoire;
+}
+
+void chargerDeplacements(typeDeplacements t, char fichier[], int * nb){
+    FILE * f;
+    char dep;
+    *nb = 0;
+
+    f = fopen(fichier, "r");
+    if (f==NULL){
+        printf("FICHIER NON TROUVE\n");
+    } else {
+        fread(&dep, sizeof(char), 1, f);
+        if (feof(f)){
+            printf("FICHIER VIDE\n");
+        } else {
+            while (!feof(f)){
+                t[*nb] = dep;
+                (*nb)++;
+                fread(&dep, sizeof(char), 1, f);
+            }
+        }
+    }
+    fclose(f);
 }
