@@ -57,7 +57,7 @@ int main(){
     lecture_niveau(nomNiveau);
     charger_partie(niveau, nomNiveau);
 
-    while (victoire == false){ // jouer les parties en boucle tant que l'utilisateur n'a pas abandonner
+    while (victoire == false){
         // remise a 0
         touche = '\0';
         compteur = 0;        
@@ -68,7 +68,7 @@ int main(){
         affiche_entete(nomNiveau, compteur);
         afficher_plateau(plateau, niveau);
 
-        while (touche != ABANDON && victoire == false){ // boucle d'affichage + deplacements + undo, tant que pas de victorie ou d'abandon
+        while (victoire == false){ 
             usleep(60000); // delay pour ne pas prendre trop de ressources
             victoire = gagne(plateau, niveau);
             if (kbhit()){ // si touche appuyé
@@ -81,7 +81,7 @@ int main(){
             }
         }
     }
-    if (victoire == true){ // victoire + enregistrer
+    if (victoire == true){ // victoire
         printf("Bravo !!! passez au niveau suivant !\n");
     }
     return EXIT_SUCCESS;
