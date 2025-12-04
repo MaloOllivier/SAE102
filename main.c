@@ -182,19 +182,19 @@ void deplacer(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int
         plateau[x][y] = CAISSES[0];
         (*compteur)++;
     }
-    else if(deplacement[i] == CAISSE_HAUT){
+    else if(deplacement[i] == CAISSE_HAUT && plateau[x - 1][y] == CAISSES[0]){
         plateau[x - 1][y] = SOKOBAN[0];
         plateau[x + 1][y] = ESPACE[0];
         plateau[x][y] = CAISSES[0];
         (*compteur)++;
     }
-    else if(deplacement[i] == CAISSE_DROITE){
+    else if(deplacement[i] == CAISSE_DROITE && plateau[x][y + 1] == CAISSES[0]){
         plateau[x][y + 1] = SOKOBAN[0];
         plateau[x][y - 1] = ESPACE[0];
         plateau[x][y] = CAISSES[0];
         (*compteur)++;
     }
-    else if(deplacement[i] == CAISSE_GAUCHE){
+    else if(deplacement[i] == CAISSE_GAUCHE && plateau[x][y - 1] == CAISSES[0]){
         plateau[x][y - 1] = SOKOBAN[0];
         plateau[x][y + 1] = ESPACE[0];
         plateau[x][y] = CAISSES[0];
