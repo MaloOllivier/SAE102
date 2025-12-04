@@ -43,7 +43,7 @@ void charger_partie(t_Plateau plateau, char fichier[]);
 void afficher_plateau(t_Plateau plateau, t_Plateau niveau);
 void affiche_entete(char niveau[], int compteur);
 void lecture_touches(char *Adr_touche);
-void deplacer(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int nbDep, int *compteur);
+void deplacer(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int *compteur);
 void detection_sokoban(t_Plateau plateau, int *AdrX, int *AdrY);
 bool gagne(t_Plateau plateau, t_Plateau niveau);
 void chargerDeplacements(typeDeplacements t, char fichier[], int * nb);
@@ -78,7 +78,7 @@ int main(){
             usleep(120000); // delay pour ne pas prendre trop de ressources
             victoire = gagne(plateau, niveau);
             detection_sokoban(plateau, &sokobanX, &sokobanY);
-            deplacer(deplacements, plateau, sokobanX, sokobanY, nbDep, &compteur);
+            deplacer(deplacements, plateau, sokobanX, sokobanY, &compteur);
             system("clear");
             affiche_entete(nomNiveau, compteur);
             afficher_plateau(plateau, niveau);
@@ -154,7 +154,7 @@ void affiche_entete(char niveau[], int compteur){
     printf("Nombre de deplacements : %d \n\n\n", compteur);
 }
 
-void deplacer(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int nbDep, int *compteur){
+void deplacer(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int *compteur){
     int i = *compteur;
     if(deplacement[i] == SOK_BAS){
         plateau[x + 1][y] = SOKOBAN[0]; 
@@ -179,25 +179,25 @@ void deplacer(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int
     else if(deplacement[i] == CAISSE_BAS && plateau[x + 1][y] == CAISSES[0]){ 
         plateau[x + 1][y] = SOKOBAN[0];
         plateau[x - 1][y] = ESPACE[0];
-        plateau[x][y] = CAISSES[0];
+        plateau[x + 2][y] = CAISSES[0];
         (*compteur)++;
     }
     else if(deplacement[i] == CAISSE_HAUT && plateau[x - 1][y] == CAISSES[0]){
         plateau[x - 1][y] = SOKOBAN[0];
         plateau[x + 1][y] = ESPACE[0];
-        plateau[x][y] = CAISSES[0];
+        plateau[x - 2][y] = CAISSES[0];
         (*compteur)++;
     }
     else if(deplacement[i] == CAISSE_DROITE && plateau[x][y + 1] == CAISSES[0]){
         plateau[x][y + 1] = SOKOBAN[0];
         plateau[x][y - 1] = ESPACE[0];
-        plateau[x][y] = CAISSES[0];
+        plateau[x][y + 2] = CAISSES[0];
         (*compteur)++;
     }
     else if(deplacement[i] == CAISSE_GAUCHE && plateau[x][y - 1] == CAISSES[0]){
         plateau[x][y - 1] = SOKOBAN[0];
         plateau[x][y + 1] = ESPACE[0];
-        plateau[x][y] = CAISSES[0];
+        plateau[x][y - 2] = CAISSES[0];
         (*compteur)++;
     }
 }
