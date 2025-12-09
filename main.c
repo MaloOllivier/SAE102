@@ -44,11 +44,9 @@ void afficher_plateau(t_Plateau plateau, t_Plateau niveau);
 void affiche_entete(char niveau[], int compteur);
 void lecture_touches(char *Adr_touche);
 void deplacer(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int *compteur);
-void deplacercaisse(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int *compteur);
 void detection_sokoban(t_Plateau plateau, int *AdrX, int *AdrY);
 bool gagne(t_Plateau plateau, t_Plateau niveau);
 void chargerDeplacements(typeDeplacements t, char fichier[], int * nb);
-
 
 
 int main(){
@@ -178,11 +176,7 @@ void deplacer(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int
         plateau[x][y] = ESPACE[0];
         (*compteur)++;
     }
-
-}
-void deplacercaisse(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int *compteur){
-    int i = *compteur;
-    if(deplacement[i] == CAISSE_BAS && plateau[x + 1][y] == CAISSES[0]){ 
+    else if(deplacement[i] == CAISSE_BAS && plateau[x + 1][y] == CAISSES[0]){ 
         plateau[x + 1][y] = SOKOBAN[0];
         plateau[x][y] = ESPACE[0];
         plateau[x + 2][y] = CAISSES[0];
