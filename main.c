@@ -61,7 +61,7 @@ int main(){
     lecture_niveau(nomNiveau);
     charger_partie(niveau, nomNiveau);
 
-    while (victoire == false){
+    
         // remise a 0
         compteur = 0;        
 
@@ -85,7 +85,7 @@ int main(){
             affiche_entete(nomNiveau, compteur);
             afficher_plateau(plateau, niveau);
         }
-    }
+    
     if (victoire == true){ // victoire
         printf("---------------------------------------------------------------------------------------------------------------\n");
         printf("La suite de déplacement %s est bien une solution de la partie pour la partie %s.\n\n", nomDeplacement, nomNiveau);
