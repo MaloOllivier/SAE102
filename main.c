@@ -74,7 +74,7 @@ int main(){
         affiche_entete(nomNiveau, compteur);
         afficher_plateau(plateau, niveau);
 
-        while (victoire == false){ 
+        while (compteur < nbDep){ 
             usleep(120000); // delay pour ne pas prendre trop de ressources
             victoire = gagne(plateau, niveau);
             detection_sokoban(plateau, &sokobanX, &sokobanY);
