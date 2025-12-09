@@ -6,6 +6,7 @@
 #include <termios.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <ctype.h>
 
 #define TAILLE 12
 #define NB_DEPLACEMENTS 500
@@ -79,6 +80,7 @@ int main(){
             usleep(120000); // delay pour ne pas prendre trop de ressources
             victoire = gagne(plateau, niveau);
             detection_sokoban(plateau, &sokobanX, &sokobanY);
+            depPossible = false;
             depPossible = deplacement_possible(deplacements, plateau, sokobanX, sokobanY, compteur);
             deplacer(deplacements, plateau, sokobanX, sokobanY, &compteur, depPossible);
             system("clear");
@@ -165,7 +167,7 @@ void affiche_entete(char niveau[], int compteur){
 
 bool deplacement_possible(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int compteur){
     bool possible = false;
-    dep = tolower(deplacement[i]);
+    char dep = tolower(deplacement[compteur]);
     if (dep == SOK_HAUT && x > 0 && plateau[x - 1][y] != MURS[0]){
         if (!(plateau[x - 1][y] == CAISSES[0] &&
               (plateau[x - 2][y] == MURS[0] || plateau[x - 2][y] == CAISSES[0]))){
@@ -193,6 +195,9 @@ bool deplacement_possible(typeDeplacements deplacement, t_Plateau plateau, int x
     return possible;
 }
 
+
+
+
 void deplacer(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int *compteur, bool possible){
     int i = *compteur;
     if(deplacement[i] == SOK_BAS && possible){
@@ -200,37 +205,47 @@ void deplacer(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int
         plateau[x][y] = ESPACE[0];
         
     }
-    else if(deplacement[i] == SOK_HAUT){ 
+    else if(deplacement[i] == SOK_HAUT && possible){ 
         plateau[x - 1][y] = SOKOBAN[0];
         plateau[x][y] = ESPACE[0];
     }
-    else if(deplacement[i] == SOK_DROITE){
+    else if(deplacement[i] == SOK_DROITE  && possible){
         plateau[x][y + 1] = SOKOBAN[0];
         plateau[x][y] = ESPACE[0];
     }
-    else if(deplacement[i] == SOK_GAUCHE){
+    else if(deplacement[i] == SOK_GAUCHE  && possible){
         plateau[x][y - 1] = SOKOBAN[0];
         plateau[x][y] = ESPACE[0];
     }
     else if(deplacement[i] == CAISSE_BAS && plateau[x + 1][y] == CAISSES[0]){ 
-        plateau[x + 1][y] = SOKOBAN[0];
-        plateau[x][y] = ESPACE[0];
-        plateau[x + 2][y] = CAISSES[0];
+        if(possible){
+            plateau[x + 1][y] = SOKOBAN[0];
+            plateau[x][y] = ESPACE[0];
+            plateau[x + 2][y] = CAISSES[0];
+        }
+
     }
     else if(deplacement[i] == CAISSE_HAUT && plateau[x - 1][y] == CAISSES[0]){
-        plateau[x - 1][y] = SOKOBAN[0];
-        plateau[x][y] = ESPACE[0];
-        plateau[x - 2][y] = CAISSES[0];
+        if(possible){
+            plateau[x - 1][y] = SOKOBAN[0];
+            plateau[x][y] = ESPACE[0];
+            plateau[x - 2][y] = CAISSES[0];
+        }
     }
     else if(deplacement[i] == CAISSE_DROITE && plateau[x][y + 1] == CAISSES[0]){
-        plateau[x][y + 1] = SOKOBAN[0];
-        plateau[x][y] = ESPACE[0];
-        plateau[x][y + 2] = CAISSES[0];
+        if(possible){
+            plateau[x][y + 1] = SOKOBAN[0];
+            plateau[x][y] = ESPACE[0];
+            plateau[x][y + 2] = CAISSES[0];
+        }
+
     }
     else if(deplacement[i] == CAISSE_GAUCHE && plateau[x][y - 1] == CAISSES[0]){
-        plateau[x][y - 1] = SOKOBAN[0];
-        plateau[x][y] = ESPACE[0];
-        plateau[x][y - 2] = CAISSES[0];
+        if(possible){
+            plateau[x][y - 1] = SOKOBAN[0];
+            plateau[x][y] = ESPACE[0];
+            plateau[x][y - 2] = CAISSES[0];
+        }
     }
     (*compteur)++;
 }
