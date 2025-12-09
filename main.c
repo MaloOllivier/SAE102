@@ -75,7 +75,7 @@ int main(){
     chargerDeplacements(deplacements, nomDeplacement, &nbDep);
     printf("nbDep : %d\n",nbDep);
     system("clear");
-    affiche_entete(nomNiveau, compteur);
+    affiche_entete(nomNiveau, compteurDep);
     afficher_plateau(plateau, niveau);
 
     while (compteur < nbDep){ 
