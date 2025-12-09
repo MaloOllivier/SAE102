@@ -63,29 +63,29 @@ int main(){
     charger_partie(niveau, nomNiveau);
 
     
-        // remise a 0
-        compteur = 0;        
+    // remise a 0
+    compteur = 0;        
 
-        // initialisation
-        charger_partie(plateau, nomNiveau);
-        printf("Fichier deplacements (.dep) : ");
-        scanf("%s",nomDeplacement);
-        chargerDeplacements(deplacements, nomDeplacement, &nbDep);
-        printf("nbDep : %d\n",nbDep);
+    // initialisation
+    charger_partie(plateau, nomNiveau);
+    printf("Fichier deplacements (.dep) : ");
+    scanf("%s",nomDeplacement);
+    chargerDeplacements(deplacements, nomDeplacement, &nbDep);
+    printf("nbDep : %d\n",nbDep);
+    system("clear");
+    affiche_entete(nomNiveau, compteur);
+    afficher_plateau(plateau, niveau);
+
+    while (compteur < nbDep){ 
+        usleep(120000); // delay pour ne pas prendre trop de ressources
+        victoire = gagne(plateau, niveau);
+        detection_sokoban(plateau, &sokobanX, &sokobanY);
+        depPossible = false;
+        depPossible = deplacement_possible(deplacements, plateau, sokobanX, sokobanY, compteur);
+        deplacer(deplacements, plateau, sokobanX, sokobanY, &compteur, depPossible);
         system("clear");
         affiche_entete(nomNiveau, compteur);
         afficher_plateau(plateau, niveau);
-
-        while (compteur < nbDep){ 
-            usleep(120000); // delay pour ne pas prendre trop de ressources
-            victoire = gagne(plateau, niveau);
-            detection_sokoban(plateau, &sokobanX, &sokobanY);
-            depPossible = false;
-            depPossible = deplacement_possible(deplacements, plateau, sokobanX, sokobanY, compteur);
-            deplacer(deplacements, plateau, sokobanX, sokobanY, &compteur, depPossible);
-            system("clear");
-            affiche_entete(nomNiveau, compteur);
-            afficher_plateau(plateau, niveau);
         }
     
     if (victoire == true){ // victoire
@@ -200,22 +200,29 @@ bool deplacement_possible(typeDeplacements deplacement, t_Plateau plateau, int x
 
 void deplacer(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int *compteur, bool possible){
     int i = *compteur;
-    if(deplacement[i] == SOK_BAS && possible){
-        plateau[x + 1][y] = SOKOBAN[0]; 
-        plateau[x][y] = ESPACE[0];
-        
+    if(deplacement[i] == SOK_BAS && plateau[x + 1][y] != CAISSES[0]){
+       if(possible){
+            plateau[x + 1][y] = SOKOBAN[0]; 
+            plateau[x][y] = ESPACE[0];
+       } 
     }
-    else if(deplacement[i] == SOK_HAUT && possible){ 
-        plateau[x - 1][y] = SOKOBAN[0];
-        plateau[x][y] = ESPACE[0];
+    else if(deplacement[i] == SOK_HAUT && plateau[x - 1][y] != CAISSES[0]){ 
+        if(possible){
+            plateau[x - 1][y] = SOKOBAN[0];
+            plateau[x][y] = ESPACE[0];
+        }
     }
-    else if(deplacement[i] == SOK_DROITE  && possible){
-        plateau[x][y + 1] = SOKOBAN[0];
-        plateau[x][y] = ESPACE[0];
+    else if(deplacement[i] == SOK_DROITE && plateau[x][y + 1] != CAISSES[0]){
+        if(possible){
+            plateau[x][y + 1] = SOKOBAN[0];
+            plateau[x][y] = ESPACE[0];
+        }
     }
-    else if(deplacement[i] == SOK_GAUCHE  && possible){
-        plateau[x][y - 1] = SOKOBAN[0];
-        plateau[x][y] = ESPACE[0];
+    else if(deplacement[i] == SOK_GAUCHE && plateau[x][y - 1] != CAISSES[0]){
+        if(possible){
+            plateau[x][y - 1] = SOKOBAN[0];
+            plateau[x][y] = ESPACE[0];
+        }
     }
     else if(deplacement[i] == CAISSE_BAS && plateau[x + 1][y] == CAISSES[0]){ 
         if(possible){
