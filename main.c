@@ -95,7 +95,7 @@ int main(){
     }
     else{
         printf("---------------------------------------------------------------------------------------------------------------\n");
-        printf("La suite de déplacements %s N’EST PAS une solution pour la partie %s.", nomDeplacement, nomNiveau);
+        printf("La suite de déplacements %s N’EST PAS une solution pour la partie %s.\n", nomDeplacement, nomNiveau);
         printf("---------------------------------------------------------------------------------------------------------------\n");
     }
     return EXIT_SUCCESS;
