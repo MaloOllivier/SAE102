@@ -178,54 +178,11 @@ void deplacer(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int
         plateau[x][y] = ESPACE[0];
         (*compteur)++;
     }
-    else if(deplacement[i] == CAISSE_BAS && plateau[x + 1][y] == CAISSES[0]){ 
-        plateau[x + 1][y] = SOKOBAN[0];
-        plateau[x][y] = ESPACE[0];
-        plateau[x + 2][y] = CAISSES[0];
-        (*compteur)++;
-    }
-    else if(deplacement[i] == CAISSE_HAUT && plateau[x - 1][y] == CAISSES[0]){
-        plateau[x - 1][y] = SOKOBAN[0];
-        plateau[x][y] = ESPACE[0];
-        plateau[x - 2][y] = CAISSES[0];
-        (*compteur)++;
-    }
-    else if(deplacement[i] == CAISSE_DROITE && plateau[x][y + 1] == CAISSES[0]){
-        plateau[x][y + 1] = SOKOBAN[0];
-        plateau[x][y] = ESPACE[0];
-        plateau[x][y + 2] = CAISSES[0];
-        (*compteur)++;
-    }
-    else if(deplacement[i] == CAISSE_GAUCHE && plateau[x][y - 1] == CAISSES[0]){
-        plateau[x][y - 1] = SOKOBAN[0];
-        plateau[x][y] = ESPACE[0];
-        plateau[x][y - 2] = CAISSES[0];
-        (*compteur)++;
-    }
+
 }
 void deplacercaisse(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int *compteur){
     int i = *compteur;
-    if(deplacement[i] == SOK_BAS){
-        plateau[x + 1][y] = SOKOBAN[0]; 
-        plateau[x][y] = ESPACE[0];
-        (*compteur)++;
-    }
-    else if(deplacement[i] == SOK_HAUT){ 
-        plateau[x - 1][y] = SOKOBAN[0];
-        plateau[x][y] = ESPACE[0];
-        (*compteur)++;
-    }
-    else if(deplacement[i] == SOK_DROITE){
-        plateau[x][y + 1] = SOKOBAN[0];
-        plateau[x][y] = ESPACE[0];
-        (*compteur)++;
-    }
-    else if(deplacement[i] == SOK_GAUCHE){
-        plateau[x][y - 1] = SOKOBAN[0];
-        plateau[x][y] = ESPACE[0];
-        (*compteur)++;
-    }
-    else if(deplacement[i] == CAISSE_BAS && plateau[x + 1][y] == CAISSES[0]){ 
+    if(deplacement[i] == CAISSE_BAS && plateau[x + 1][y] == CAISSES[0]){ 
         plateau[x + 1][y] = SOKOBAN[0];
         plateau[x][y] = ESPACE[0];
         plateau[x + 2][y] = CAISSES[0];
