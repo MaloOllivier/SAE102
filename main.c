@@ -36,15 +36,16 @@ const char SOK_HAUT = 'h';
 const char CAISSE_HAUT = 'H';
 const char SOK_BAS = 'b';
 const char CAISSE_BAS = 'B';
+const int DUREE_PAUSE = 200000;
 
 // prototypes de toutes les fonctions / procedures
 void lecture_niveau(char niveau[]);
 int kbhit();
 void charger_partie(t_Plateau plateau, char fichier[]);
 void afficher_plateau(t_Plateau plateau, t_Plateau niveau);
-void affiche_entete(char niveau[], int compteur);
+void affiche_entete(char niveau[], int compteurDep);
 void lecture_touches(char *Adr_touche);
-void deplacer(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int *compteur, bool possible);
+void deplacer(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int *compteur, bool possible, int *compteurDep);
 void detection_sokoban(t_Plateau plateau, int *AdrX, int *AdrY);
 bool gagne(t_Plateau plateau, t_Plateau niveau);
 bool deplacement_possible(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int compteur);
@@ -56,7 +57,7 @@ int main(){
     bool victoire = false, depPossible;
     t_Plateau plateau, niveau;
     char nomNiveau[30], nomDeplacement[30];
-    int compteur, nbDep;
+    int compteur, compteurDep, nbDep;
     int sokobanX, sokobanY;
     typeDeplacements deplacements;
     lecture_niveau(nomNiveau);
@@ -64,7 +65,8 @@ int main(){
 
     
     // remise a 0
-    compteur = 0;        
+    compteur = 0;
+    compteurDep = 0;
 
     // initialisation
     charger_partie(plateau, nomNiveau);
@@ -77,11 +79,11 @@ int main(){
     afficher_plateau(plateau, niveau);
 
     while (compteur < nbDep){ 
-        usleep(120000); // delay pour ne pas prendre trop de ressources
+        usleep(DUREE_PAUSE); // delay pour ne pas prendre trop de ressources
         detection_sokoban(plateau, &sokobanX, &sokobanY);
         depPossible = false;
         depPossible = deplacement_possible(deplacements, plateau, sokobanX, sokobanY, compteur);
-        deplacer(deplacements, plateau, sokobanX, sokobanY, &compteur, depPossible);
+        deplacer(deplacements, plateau, sokobanX, sokobanY, &compteur, depPossible, &compteurDep);
         system("clear");
         affiche_entete(nomNiveau, compteur);
         afficher_plateau(plateau, niveau);
@@ -90,7 +92,7 @@ int main(){
     if (victoire == true){ // victoire
         printf("---------------------------------------------------------------------------------------------------------------\n");
         printf("La suite de déplacement %s est bien une solution de la partie pour la partie %s.\n\n", nomDeplacement, nomNiveau);
-        printf("Elle contient %d déplacements.\n", compteur);
+        printf("Elle contient %d déplacements.\n", compteurDep);
         printf("---------------------------------------------------------------------------------------------------------------\n");
     }
     else{
@@ -158,10 +160,9 @@ void afficher_plateau(t_Plateau plateau, t_Plateau niveau){
     }
 }
 
-void affiche_entete(char niveau[], int compteur){
-    printf("SOKOBAN niveau : %s\n\ntouches de depalcements :\n%c (haut)", niveau, HAUT);
-    printf(" %c (gauche)\n%c (bas)  %c (droite)\n\n", GAUCHE, BAS, DROITE);
-    printf("Nombre de deplacements : %d \n\n\n", compteur);
+void affiche_entete(char niveau[], int compteurDep){
+    printf("SOKOBAN niveau : %s\n\n", niveau);
+    printf("Nombre de deplacements : %d \n\n\n", compteurDep);
 }
 
 bool deplacement_possible(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int compteur){
@@ -196,31 +197,34 @@ bool deplacement_possible(typeDeplacements deplacement, t_Plateau plateau, int x
 
 
 
-
-void deplacer(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int *compteur, bool possible){
+void deplacer(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int *compteur, bool possible, int *compteurDep){
     int i = *compteur;
     if(deplacement[i] == SOK_BAS && plateau[x + 1][y] != CAISSES[0]){
        if(possible){
             plateau[x + 1][y] = SOKOBAN[0]; 
             plateau[x][y] = ESPACE[0];
+            (*compteurDep)++;
        } 
     }
     else if(deplacement[i] == SOK_HAUT && plateau[x - 1][y] != CAISSES[0]){ 
         if(possible){
             plateau[x - 1][y] = SOKOBAN[0];
             plateau[x][y] = ESPACE[0];
+            (*compteurDep)++;
         }
     }
     else if(deplacement[i] == SOK_DROITE && plateau[x][y + 1] != CAISSES[0]){
         if(possible){
             plateau[x][y + 1] = SOKOBAN[0];
             plateau[x][y] = ESPACE[0];
+            (*compteurDep)++;
         }
     }
     else if(deplacement[i] == SOK_GAUCHE && plateau[x][y - 1] != CAISSES[0]){
         if(possible){
             plateau[x][y - 1] = SOKOBAN[0];
             plateau[x][y] = ESPACE[0];
+            (*compteurDep)++;
         }
     }
     else if(deplacement[i] == CAISSE_BAS && plateau[x + 1][y] == CAISSES[0]){ 
@@ -228,14 +232,15 @@ void deplacer(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int
             plateau[x + 1][y] = SOKOBAN[0];
             plateau[x][y] = ESPACE[0];
             plateau[x + 2][y] = CAISSES[0];
+            (*compteurDep)++;
         }
-
     }
     else if(deplacement[i] == CAISSE_HAUT && plateau[x - 1][y] == CAISSES[0]){
         if(possible){
             plateau[x - 1][y] = SOKOBAN[0];
             plateau[x][y] = ESPACE[0];
             plateau[x - 2][y] = CAISSES[0];
+            (*compteurDep)++;
         }
     }
     else if(deplacement[i] == CAISSE_DROITE && plateau[x][y + 1] == CAISSES[0]){
@@ -243,14 +248,15 @@ void deplacer(typeDeplacements deplacement, t_Plateau plateau, int x, int y, int
             plateau[x][y + 1] = SOKOBAN[0];
             plateau[x][y] = ESPACE[0];
             plateau[x][y + 2] = CAISSES[0];
+            (*compteurDep)++;
         }
-
     }
     else if(deplacement[i] == CAISSE_GAUCHE && plateau[x][y - 1] == CAISSES[0]){
         if(possible){
             plateau[x][y - 1] = SOKOBAN[0];
             plateau[x][y] = ESPACE[0];
             plateau[x][y - 2] = CAISSES[0];
+            (*compteurDep)++;
         }
     }
     (*compteur)++;
