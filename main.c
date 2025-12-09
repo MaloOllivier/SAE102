@@ -85,11 +85,18 @@ int main(){
         }
     }
     if (victoire == true){ // victoire
-        printf("Bravo !!! passez au niveau suivant !\n");
+        printf("---------------------------------------------------------------------------------------------------------------\n");
+        printf("La suite de déplacement %s est bien une solution de la partie pour la partie %s.\n\n", nomDeplacement, nomNiveau);
+        printf("Elle contient %d déplacements.\n", compteur);
+        printf("---------------------------------------------------------------------------------------------------------------\n");
+    }
+    else{
+        printf("---------------------------------------------------------------------------------------------------------------\n");
+        printf("La suite de déplacements %s N’EST PAS une solution pour la partie %s.", nomDeplacement, nomNiveau);
+        printf("---------------------------------------------------------------------------------------------------------------\n");
     }
     return EXIT_SUCCESS;
 }
-
 void lecture_niveau(char niveau[]){
     printf("nom du fichier .sok : ");
     scanf("%s", niveau);
