@@ -85,7 +85,7 @@ int main(){
         depPossible = deplacement_possible(deplacements, plateau, sokobanX, sokobanY, compteur);
         deplacer(deplacements, plateau, sokobanX, sokobanY, &compteur, depPossible, &compteurDep);
         system("clear");
-        affiche_entete(nomNiveau, compteur);
+        affiche_entete(nomNiveau, compteurDep);
         afficher_plateau(plateau, niveau);
     }
     victoire = gagne(plateau, niveau);
