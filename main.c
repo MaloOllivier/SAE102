@@ -34,7 +34,7 @@ const char SOK_BAS = 'b';
 const char CAISSE_BAS = 'B';
 
 // temps entre chaque deplacements
-const int DUREE_PAUSE = 500000;
+const int DUREE_PAUSE = 400000;
 
 // prototypes de toutes les fonctions / procedures
 void lecture_niveau(char niveau[]);
@@ -89,13 +89,13 @@ int main(){
     victoire = gagne(plateau, niveau);
     if (victoire == true){ // si la partie est gagné
         printf("---------------------------------------------------------------------------------------------------------------\n");
-        printf("La suite de déplacement %s est bien une solution de la partie pour la partie %s.\n\n", nomDeplacement, nomNiveau);
+        printf("La suite de déplacement \"%s\" est bien une solution pour la partie \"%s\".\n\n", nomDeplacement, nomNiveau);
         printf("Elle contient %d déplacements.\n", compteurDep);
         printf("---------------------------------------------------------------------------------------------------------------\n");
     }
     else{
         printf("---------------------------------------------------------------------------------------------------------------\n");
-        printf("La suite de déplacements %s N’EST PAS une solution pour la partie %s.\n", nomDeplacement, nomNiveau);
+        printf("La suite de déplacements \"%s\" N’EST PAS une solution pour la partie \"%s\" .\n", nomDeplacement, nomNiveau);
         printf("---------------------------------------------------------------------------------------------------------------\n");
     }
     return EXIT_SUCCESS;
