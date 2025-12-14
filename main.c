@@ -87,7 +87,7 @@ int main(){
         afficher_plateau(plateau, niveau);
     }
     victoire = gagne(plateau, niveau);
-    if (victoire == true){ // victoire
+    if (victoire == true){ // si la partie est gagné
         printf("---------------------------------------------------------------------------------------------------------------\n");
         printf("La suite de déplacement %s est bien une solution de la partie pour la partie %s.\n\n", nomDeplacement, nomNiveau);
         printf("Elle contient %d déplacements.\n", compteurDep);
